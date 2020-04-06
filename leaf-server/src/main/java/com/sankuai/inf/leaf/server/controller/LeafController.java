@@ -1,20 +1,23 @@
 package com.sankuai.inf.leaf.server.controller;
 
+import com.cxytiandi.kitty.id.service.DistributedIdLeafSegmentRemoteService;
+import com.cxytiandi.kitty.id.service.DistributedIdLeafSnowflakeRemoteService;
 import com.sankuai.inf.leaf.common.Result;
 import com.sankuai.inf.leaf.common.Status;
 import com.sankuai.inf.leaf.server.exception.LeafServerException;
 import com.sankuai.inf.leaf.server.exception.NoKeyException;
 import com.sankuai.inf.leaf.server.service.SegmentService;
 import com.sankuai.inf.leaf.server.service.SnowflakeService;
+import org.apache.dubbo.config.annotation.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Service(version = "1.0.0", group = "default")
 @RestController
-public class LeafController {
+public class LeafController implements DistributedIdLeafSnowflakeRemoteService, DistributedIdLeafSegmentRemoteService {
     private Logger logger = LoggerFactory.getLogger(LeafController.class);
 
     @Autowired
@@ -22,12 +25,12 @@ public class LeafController {
     @Autowired
     private SnowflakeService snowflakeService;
 
-    @RequestMapping(value = "/api/segment/get/{key}")
+    @Override
     public String getSegmentId(@PathVariable("key") String key) {
         return get(key, segmentService.getId(key));
     }
 
-    @RequestMapping(value = "/api/snowflake/get/{key}")
+    @Override
     public String getSnowflakeId(@PathVariable("key") String key) {
         return get(key, snowflakeService.getId(key));
     }
