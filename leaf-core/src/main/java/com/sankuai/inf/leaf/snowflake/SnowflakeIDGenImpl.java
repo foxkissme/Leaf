@@ -48,8 +48,10 @@ public class SnowflakeIDGenImpl implements IDGen {
         Preconditions.checkArgument(timeGen() > twepoch, "Snowflake not support twepoch gt currentTime");
         final String ip = Utils.getIp();
         LOGGER.info("twepoch:{} ,ip:{}", twepoch, ip);
+        // 获取本机ip地址
         InetAddress address = InetAddress.getLocalHost();
         byte[] ipAddressByteArray = address.getAddress();
+        // 转化为workerId
         workerId = (long) (((ipAddressByteArray[ipAddressByteArray.length - 2] & 0B11) << Byte.SIZE) + (ipAddressByteArray[ipAddressByteArray.length - 1] & 0xFF));
         Preconditions.checkArgument(workerId >= 0 && workerId <= maxWorkerId, "workerID must gte 0 and lte 1023");
     }
