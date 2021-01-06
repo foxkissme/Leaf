@@ -1,7 +1,5 @@
 package com.sankuai.inf.leaf.snowflake;
 
-import cn.hutool.core.net.NetUtil;
-import cn.hutool.core.util.IdUtil;
 import com.google.common.base.Preconditions;
 import com.sankuai.inf.leaf.IDGen;
 import com.sankuai.inf.leaf.common.Result;
@@ -52,7 +50,7 @@ public class SnowflakeIDGenImpl implements IDGen {
         InetAddress address = InetAddress.getLocalHost();
         byte[] ipAddressByteArray = address.getAddress();
         // 转化为workerId
-        workerId = (long) (((ipAddressByteArray[ipAddressByteArray.length - 2] & 0B11) << Byte.SIZE) + (ipAddressByteArray[ipAddressByteArray.length - 1] & 0xFF));
+        workerId = ((ipAddressByteArray[ipAddressByteArray.length - 2] & 0B11) << Byte.SIZE) + (ipAddressByteArray[ipAddressByteArray.length - 1] & 0xFF);
         Preconditions.checkArgument(workerId >= 0 && workerId <= maxWorkerId, "workerID must gte 0 and lte 1023");
     }
 
