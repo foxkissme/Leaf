@@ -8,6 +8,7 @@ import com.sankuai.inf.leaf.server.exception.LeafServerException;
 import com.sankuai.inf.leaf.server.exception.NoKeyException;
 import com.sankuai.inf.leaf.server.service.SegmentService;
 import com.sankuai.inf.leaf.server.service.SnowflakeService;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.apache.dubbo.config.annotation.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-@Service(version = "1.0.0", group = "default")
+@DubboService(version = "1.0.0", group = "default")
 @RestController
 public class LeafController implements DistributedIdLeafSnowflakeRemoteService, DistributedIdLeafSegmentRemoteService {
     private Logger logger = LoggerFactory.getLogger(LeafController.class);
