@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 @DubboService(version = "1.0.0", group = "default")
 @RestController
 public class LeafController implements DistributedIdLeafSnowflakeRemoteService, DistributedIdLeafSegmentRemoteService {
-    private Logger logger = LoggerFactory.getLogger(LeafController.class);
 
     @Autowired
     private SegmentService segmentService;
@@ -28,23 +27,18 @@ public class LeafController implements DistributedIdLeafSnowflakeRemoteService, 
 
     @Override
     public String getSegmentId(@PathVariable("key") String key) {
-        return get(key, segmentService.getId(key));
+        return get(segmentService.getId(key));
     }
 
     @Override
     public String getSnowflakeId(@PathVariable("key") String key) {
-        return get(key, snowflakeService.getId(key));
+        return get(snowflakeService.getId(key));
     }
 
-    private String get(@PathVariable("key") String key, Result id) {
-        Result result;
-        if (key == null || key.isEmpty()) {
-            throw new NoKeyException();
+    private String get(Result id) {
+        if (id.getStatus().equals(Status.EXCEPTION)) {
+            throw new LeafServerException(id.toString());
         }
-        result = id;
-        if (result.getStatus().equals(Status.EXCEPTION)) {
-            throw new LeafServerException(result.toString());
-        }
-        return String.valueOf(result.getId());
+        return String.valueOf(id.getId());
     }
 }
