@@ -19,12 +19,22 @@ import org.springframework.web.bind.annotation.RestController;
 @DubboService(version = "1.0.0", group = "default")
 @RestController
 public class LeafController implements DistributedIdLeafSnowflakeRemoteService, DistributedIdLeafSegmentRemoteService {
-
-    @Autowired
-    private SegmentService segmentService;
-    @Autowired
-    private SnowflakeService snowflakeService;
-
+    /**
+     * segment计算id服务
+     */
+    private final SegmentService segmentService;
+    /**
+     * 类雪花算法计算id服务
+     */
+    private final SnowflakeService snowflakeService;
+    
+    public LeafController(SegmentService segmentService,
+                          SnowflakeService snowflakeService)
+    {
+        this.segmentService = segmentService;
+        this.snowflakeService = snowflakeService;
+    }
+    
     @Override
     public String getSegmentId(@PathVariable("key") String key) {
         return get(segmentService.getId(key));
